@@ -1,8 +1,21 @@
 import requests, json
 
 url = 'https://www.twse.com.tw/IPO/newListing?response=json'
-headers = {'User-Agent': 'Mozilla/5.0'}
-res = requests.get(url, headers=headers)
+headers = {
+    'User-Agent': 'Mozilla/5.0'
+}
 
-with open('ipo.json', 'w', encoding='utf-8') as f:
-    json.dump(res.json(), f, ensure_ascii=False, indent=2)
+res = requests.get(url, headers=headers, timeout=10)
+
+try:
+    res.raise_for_status()
+    data = res.json()  # 如果這裡是 HTML，會報錯
+
+    with open('ipo.json', 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+    print("✅ 已成功儲存 TWSE IPO JSON")
+except Exception as e:
+    print("❌ 發生錯誤：", e)
+    print("⚠️ 伺服器回應前 200 字：")
+    print(res.text[:200])
