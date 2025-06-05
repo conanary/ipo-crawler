@@ -8,7 +8,7 @@ def get_ipo():
     try:
         with open("ipo.json", encoding="utf-8") as f:
             data = json.load(f)
-        return jsonify(data)
+            return jsonify(data)
     except Exception as e:
         return jsonify({"error": str(e)})
 
