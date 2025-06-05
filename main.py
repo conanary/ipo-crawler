@@ -12,10 +12,11 @@ def fetch_ipo_data():
 
     try:
         res = requests.get(url, headers=headers, timeout=10)
-        res.raise_for_status()  # 自動丟出 HTTP 錯誤
+        res.raise_for_status()
+        print("💬 Raw response:", res.text[:200])  # 印出前200字看看內容是什麼
         json_data = res.json()
     except Exception as e:
-        return {'error': str(e)}  # 回傳錯誤內容給你看
+        return {'error': str(e)}
 
     raw_data = json_data.get('data', [])
     result = []
