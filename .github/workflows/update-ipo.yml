@@ -1,0 +1,34 @@
+name: Daily IPO JSON Update
+
+on:
+  schedule:
+    - cron: '0 1 * * *'  # 台灣早上 9:00（UTC+8）
+  workflow_dispatch:     # 手動觸發也可以
+
+jobs:
+  update-ipo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: ✅ Checkout repo
+        uses: actions/checkout@v3
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install dependencies
+        run: pip install requests
+
+      - name: 🚀 Fetch IPO JSON from TWSE
+        run: |
+          python -c "import requests, json; url='https://www.twse.com.tw/IPO/newListing?response=json'; headers={'User-Agent': 'Mozilla/5.0'}; res=requests.get(url, headers=headers, timeout=10); res.raise_for_status(); data=res.json(); json.dump(data, open('ipo.json','w',encoding='utf-8'), ensure_ascii=False, indent=2)"
+
+      - name: 📤 Commit & push if changed
+        run: |
+          git config user.name \"github-actions\"
+          git config user.email \"github-actions@github.com\"
+          git add ipo.json
+          git diff --cached --quiet || git commit -m \"chore: daily update ipo.json\"
+          git push
