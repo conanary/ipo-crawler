@@ -1,50 +1,14 @@
-[
-  {
-    "stock_name": "",
-    "stock_code": "",
-    "underwriter": "",
-    "apply_start": "",
-    "apply_end": "",
-    "draw_date": ""
-  },
-  {
-    "stock_name": "",
-    "stock_code": "",
-    "underwriter": "",
-    "apply_start": "",
-    "apply_end": "",
-    "draw_date": ""
-  },
-  {
-    "stock_name": "",
-    "stock_code": "",
-    "underwriter": "",
-    "apply_start": "",
-    "apply_end": "",
-    "draw_date": ""
-  },
-  {
-    "stock_name": "",
-    "stock_code": "",
-    "underwriter": "",
-    "apply_start": "",
-    "apply_end": "",
-    "draw_date": ""
-  },
-  {
-    "stock_name": "",
-    "stock_code": "",
-    "underwriter": "",
-    "apply_start": "",
-    "apply_end": "",
-    "draw_date": ""
-  },
-  {
-    "stock_name": "",
-    "stock_code": "",
-    "underwriter": "",
-    "apply_start": "",
-    "apply_end": "",
-    "draw_date": ""
-  }
-]
+import requests, json
+
+url = 'https://www.twse.com.tw/IPO/newListing?response=json'
+headers = {
+    'User-Agent': 'Mozilla/5.0'
+}
+res = requests.get(url, headers=headers)
+data = res.json()  # 保留完整結構，包括 'data', 'fields'
+
+# ✅ 寫入整份 JSON 結構
+with open('ipo.json', 'w', encoding='utf-8') as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+
+print("✅ 正確格式的 ipo.json 已建立")
